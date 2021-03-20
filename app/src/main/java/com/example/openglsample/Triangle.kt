@@ -64,7 +64,7 @@ class Triangle {
         }
     }
 
-    fun loadShader(type: Int, shaderCode: String): Int {
+    private fun loadShader(type: Int, shaderCode: String): Int {
         return GLES30.glCreateShader(type).also { shader ->
             GLES30.glShaderSource(shader, shaderCode)
             GLES30.glCompileShader(shader)

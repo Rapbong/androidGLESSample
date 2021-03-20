@@ -63,6 +63,7 @@ class MyRenderer : GLSurfaceView.Renderer {
 
         // Draw triangle
         triangle.draw(scratch)
+        square2.draw()
     }
 
     fun loadShader(type: Int, shaderCode: String): Int {
