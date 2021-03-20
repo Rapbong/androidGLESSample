@@ -71,20 +71,37 @@ class Triangle {
         }
     }
 
+    // pass in the calculated transformation matrix
     fun draw(mvpMatrix: FloatArray) {
-        // pass in the calculated transformation matrix
+        GLES30.glUseProgram(program)
+        positionHandle = GLES30.glGetAttribLocation(program, "vPosition").also {
+            GLES30.glEnableVertexAttribArray(it)
 
-        //get handle to shape's transformation matrix
-        vPMatrixHandle = GLES30.glGetUniformLocation(program, "uMVPMatrix")
+            GLES30.glVertexAttribPointer(
+                    it,
+                    COORDS_PER_VERTEX,
+                    GLES30.GL_FLOAT,
+                    false,
+                    vertexStride,
+                    vertexBuffer
+            )
 
-        // Pass the projection and view transformation to the shader
-        GLES30.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0)
+            colorHandle = GLES30.glGetUniformLocation(program, "vColor").also { colorHandle ->
+                GLES30.glUniform4fv(colorHandle, 1, color, 0)
+            }
 
-        // Draw the triangle
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexCount)
+            //get handle to shape's transformation matrix
+            vPMatrixHandle = GLES30.glGetUniformLocation(program, "uMVPMatrix")
 
-        // Disable vertex array
-        GLES30.glDisableVertexAttribArray(positionHandle)
+            // Pass the projection and view transformation to the shader
+            GLES30.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0)
+
+            // Draw the triangle
+            GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexCount)
+
+            // Disable vertex array
+            GLES30.glDisableVertexAttribArray(it)
+        }
     }
 
     fun draw() {
